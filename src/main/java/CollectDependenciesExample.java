@@ -28,11 +28,11 @@ public class CollectDependenciesExample {
         // TODO you may need to change the following line:
         File localRepo = new File(String.join(File.separator, System.getProperty("user.home"), ".m2", "repository"));
 
-        RepositorySystem system = newRepositorySystem();
+        RepositorySystem repositorySystem = newRepositorySystem();
         DefaultRepositorySystemSession defaultRepositorySystemSession = MavenRepositorySystemUtils.newSession();
 
         final LocalRepository local = new LocalRepository(localRepo);
-        defaultRepositorySystemSession.setLocalRepositoryManager(system.newLocalRepositoryManager(defaultRepositorySystemSession, local));
+        defaultRepositorySystemSession.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(defaultRepositorySystemSession, local));
 
         List<RemoteRepository> remotes = Arrays.asList(
                 new RemoteRepository.Builder("maven-central", "default", "http://repo1.maven.org/maven2/").build()
@@ -53,7 +53,7 @@ public class CollectDependenciesExample {
         DefaultArtifact artifact = new DefaultArtifact("junit", "junit-dep", "", "jar", "4.10");
         CollectRequest request = new CollectRequest(new Dependency(artifact, null), remotes);
 
-        CollectResult result = system.collectDependencies(defaultRepositorySystemSession, request);
+        CollectResult result = repositorySystem.collectDependencies(defaultRepositorySystemSession, request);
         DependencyNode root = result.getRoot();
         root.accept(new DependencyVisitor() {
             AtomicInteger indent = new AtomicInteger();
